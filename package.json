@@ -1,0 +1,24 @@
+{
+  "name": "puppymisc",
+  "version": "1.0.1",
+  "description": "Small miscellaneous Node.js utilities for timestamps, file metadata, and async helpers",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "keywords": [
+    "utils",
+    "utility",
+    "timestamp",
+    "async",
+    "wait",
+    "filesystem",
+    "node"
+  ],
+  "scripts": {
+    "test": "node src/tests/test.js"
+  },
+  "author": "onlypuppy7",
+  "license": "MIT"
+}
