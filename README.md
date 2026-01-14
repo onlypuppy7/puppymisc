@@ -11,7 +11,7 @@ Various misc functions, ported to npm. Another useless file taken out of my proj
 
 ## Usage
 ```js
-import { getTimestamp, getLastSavedTimestamp, waitUntil, wait } from 'puppymisc';
+import { getTimestamp, getLastSavedTimestamp, waitUntil, wait, stripAnsi, divideString, ensureDirExists } from '../index.js';
 
 // timestamps
 
@@ -66,4 +66,17 @@ try {
 console.log('waiting 1 second');
 await wait(1000);
 console.log('done waiting');
+
+// stripping ANSI codes from a string
+
+const stringWithAnsi = '\x1b[31mThis is red text\x1b[0m';
+console.log(stringWithAnsi); // This is red text (in red)
+const cleanString = stripAnsi(stringWithAnsi);
+console.log(cleanString); // This is red text
+
+// dividing a string into chunks
+
+const longString = 'abcdefghijklmnopqrstuvwxyz';
+const chunks = divideString(longString, 5);
+console.log(chunks); // [ 'abcde', 'fghij', 'klmno', 'pqrst', 'uvwxy', 'z' ]
 ```

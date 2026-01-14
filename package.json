@@ -1,6 +1,6 @@
 {
   "name": "puppymisc",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Small miscellaneous Node.js utilities for timestamps, file metadata, and async helpers",
   "type": "module",
   "main": "./src/index.js",

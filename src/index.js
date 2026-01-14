@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 
 export const getTimestamp = (perpetual) => {
     const now = new Date();
@@ -46,4 +47,18 @@ export function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export default { getTimestamp, getLastSavedTimestamp, waitUntil, wait };
+export const stripAnsi = (str) => str.replace(/\x1B[[(?);]{0,2}(;?\d)*./g, '');
+
+export const divideString = (str, chunkSize) => {
+    const result = [];
+    for (let i = 0; i < str.length; i += chunkSize) {
+        result.push(str.slice(i, i + chunkSize));
+    }
+    return result;
+};
+
+export const ensureDirExists = (filePath) => {
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+};
+
+export default { getTimestamp, getLastSavedTimestamp, waitUntil, wait, stripAnsi, divideString, ensureDirExists };
