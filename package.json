@@ -1,8 +1,9 @@
 {
   "name": "puppymisc",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Small miscellaneous Node.js utilities for timestamps, file metadata, and async helpers",
   "type": "module",
+  "types": "./index.d.ts",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
