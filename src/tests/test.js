@@ -1,4 +1,4 @@
-import { getTimestamp, getLastSavedTimestamp, waitUntil, wait, stripAnsi, divideString, ensureDirExists } from '../index.js';
+import { getTimestamp, getLastSavedTimestamp, waitUntil, wait, stripAnsi, divideString, ensureDirExists } from 'puppymisc';
 
 // timestamps
 
