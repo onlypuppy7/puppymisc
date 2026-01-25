@@ -11,72 +11,95 @@ Various misc functions, ported to npm. Another useless file taken out of my proj
 
 ## Usage
 ```js
-import { getTimestamp, getLastSavedTimestamp, waitUntil, wait, stripAnsi, divideString, ensureDirExists } from '../index.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import {
+    getTimestamp,
+    getLastSavedTimestamp,
+    waitUntil,
+    wait,
+    stripAnsi,
+    divideString,
+    ensureDirExists,
+    getTimePython,
+    searchList,
+    copyViaJson,
+    findKeyByAttribute,
+    sortByKey,
+    pickRandomFilename
+} from 'puppymisc';
 
-// timestamps
+// --- Timestamps ---
+console.log('getTimestamp():', getTimestamp());        // human readable
+console.log('getTimestamp(true):', getTimestamp(true)); // filesystem safe
+console.log('getTimePython():', getTimePython());      // python-style timestamp
 
-// formatted human readable timestamp
-const ts = getTimestamp();
-console.log(ts);
-// [13-01-26 02:14:08.123]
-
-// filesystem safe timestamp, good for filenames
-const fileTs = getTimestamp(true);
-console.log(fileTs);
-// 26-01-13_02-14-08-123
-
-// checking when a file was last modified
-
+// --- Last saved timestamp ---
 const lastSaved = getLastSavedTimestamp('./config.json');
+console.log('Last saved timestamp:', lastSaved === 0 ? 'file does not exist' : lastSaved);
 
-if (lastSaved === 0) {
-    console.log('file does not exist yet');
-} else {
-    console.log('last modified at ms:', lastSaved);
-}
-
-// waiting for a condition to become true
-
+// --- waitUntil & wait ---
 let ready = false;
-
-// simulate async state change
-setTimeout(() => {
-    ready = true;
-}, 500);
-
+setTimeout(() => ready = true, 500);
 await waitUntil(() => ready);
-
 console.log('ready flag is now true');
 
-// waitUntil with timeout protection
-
 try {
-    await waitUntil(
-        () => fs.existsSync('./output.txt'),
-        100,      // check every 100ms
-        3000      // fail after 3 seconds
-    );
-    console.log('file appeared');
+    await waitUntil(() => fs.existsSync('./output.txt'), 100, 3000);
+    console.log('output.txt appeared');
 } catch (err) {
-    console.log('file never appeared');
+    console.log('output.txt never appeared');
 }
 
-// simple delay
-
-console.log('waiting 1 second');
+console.log('waiting 1 second...');
 await wait(1000);
 console.log('done waiting');
 
-// stripping ANSI codes from a string
-
+// --- stripAnsi ---
 const stringWithAnsi = '\x1b[31mThis is red text\x1b[0m';
-console.log(stringWithAnsi); // This is red text (in red)
-const cleanString = stripAnsi(stringWithAnsi);
-console.log(cleanString); // This is red text
+console.log('Original:', stringWithAnsi);
+console.log('Stripped:', stripAnsi(stringWithAnsi));
 
-// dividing a string into chunks
-
+// --- divideString ---
 const longString = 'abcdefghijklmnopqrstuvwxyz';
-const chunks = divideString(longString, 5);
-console.log(chunks); // [ 'abcde', 'fghij', 'klmno', 'pqrst', 'uvwxy', 'z' ]
+console.log('Divided:', divideString(longString, 5));
+
+// --- ensureDirExists ---
+const testDir = path.join('.', 'temp', 'nested', 'dir', 'file.txt');
+ensureDirExists(testDir);
+console.log('Ensured directory exists for', testDir);
+
+// --- searchList ---
+const list = ['apple', 'banana', 'grapefruit', 'orange'];
+console.log('searchList:', searchList(list, 'gra'));    // should match 'grapefruit'
+console.log('searchList (cutDown=false):', searchList(list, 'appl', false));
+
+// --- copyViaJson ---
+const obj = { a: 1, b: { c: 2 } };
+const objCopy = copyViaJson(obj);
+objCopy.b.c = 99;
+console.log('Original object:', obj);
+console.log('Copied object:', objCopy);
+
+// --- findKeyByAttribute ---
+const dictList = [
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' }
+];
+console.log('findKeyByAttribute:', findKeyByAttribute(dictList, 'name', 'Bob')); // 1
+console.log('findKeyByAttribute (nonexistent):', findKeyByAttribute(dictList, 'name', 'Eve')); // null
+
+// --- sortByKey ---
+const numbers = [
+    { value: 10 },
+    { value: 5 },
+    { value: 20 }
+];
+console.log('sortByKey:', sortByKey(numbers, 'value'));
+
+// --- pickRandomFilename ---
+const randomFile = pickRandomFilename('.');
+console.log('pickRandomFilename:', randomFile);
+
 ```
